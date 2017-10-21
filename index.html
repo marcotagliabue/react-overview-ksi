@@ -1,0 +1,517 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>KSI - Thinking in React</title>
+
+	<meta name="description" content="Thinking in React">
+	<meta name="author" content="Marco Tagliabue">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+	<link rel="stylesheet" href="css/iconic.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/radicalbit.css" id="theme">
+
+	<!-- Code syntax highlighting -->
+	<link rel="stylesheet" href="lib/css/zenburn.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+	</script>
+
+	<!--[if lt IE 9]>
+	<script src="lib/js/html5shiv.js"></script>
+	<![endif]-->
+</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<img src="images/Logo_pos.png" style="max-height: 275px; margin-right: 110px; margin-bottom: 70px;"/>
+					<h3 style="text-align: left; font-weight: 500">Thinking in React</h3>
+					<p style="text-align: left">@marcotagliabue</p>
+				</section>
+
+				<section style="text-align: left;">
+					<img src="images/profile.png" style="width:150px;height:150px;border-radius:50%;padding: 20px; border: 1px solid #8c8f90;"/>
+					<div class="speaker-info">
+						<p><i class="icon ion-person"></i>  Marco Tagliabue</p>
+						<p><i class="icon ion-location"></i>  Milan, IT</p>
+						<p><i class="icon ion-android-contacts"></i><a target="_blank" href="https://www.radicalbit.io">https://www.radicalbit.io</a></p>
+						<p><i class="icon ion-social-twitter"></i>@marcotagliabue</p>
+						<p><i class="icon ion-social-github"></i><a target="_blank" href="https://www.radicalbit.io">https://github.com/marcotagliabue</a></p>
+					</div>
+				</section>
+
+				<section style="text-align: left;">
+					<h3>Agenda</h3>
+					<ol>
+						<li>Introduction</li>
+						<li>Component</li>
+						<li>Props & State</li>
+						<li>Lifecycle</li>
+						<li>Virtual DOM</li>
+						<li>JSX</li>
+						<li>Flux Design Pattern</li>
+						<li>Demo</li>
+					</ol>
+				</section>
+
+				<section>
+					<section>
+						<h1>What is React?</h1>
+					</section>
+					<section>
+						<h3 style="text-align: left;">What is React?</h3>
+						<ul>
+							<li>Developed by Facebook</li><br>
+							<li>React is a view layer library, not a framework like Backbone, Angular etc.</li><br>
+							<li>You can't use React to build a fully-functional web app</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>Why was React developed?</h1>
+					</section>
+					<section>
+						<h3 style="text-align: left;">Why was React developed?</h3>
+						<ul style="margin-right: 125px;">
+							<li>Complexity of two-way data binding</li><br>
+							<li>Bad UX from using "cascading updates" of DOM tree</li><br>
+							<li>A lot of data on a page changing over time</li><br>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>Who uses React?</h1>
+					</section>
+
+					<section>
+						<h3 style="text-align: left;">Who uses React?</h3>
+						<img src="images/facebook_logo.png" style="width: 200px;"/>
+						<img src="images/Netflix_Web_Logo.png" style="width: 200px; margin: 20px "/>
+						<img src="images/asana-logo.png" style="width: 200px; margin: 20px"/>
+						<img src="images/instagram-logo.png" style="width: 200px; margin: 20px"/>
+						<img src="images/airbnb_horizontal_lockup_print.jpg" style="width: 200px; margin: 20px"/>
+						<img src="images/reddit_logo_85525217_a_l.jpg" style="width: 200px; margin: 20px"/>
+						<a target="_blank" href="https://github.com/facebook/react/wiki/Sites-Using-React">https://github.com/facebook/react/wiki/Sites-Using-React</a>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>Component</h1>
+					</section>
+					<section style="text-align: left;">
+						<h3>React has No:</h3>
+						<div class="fragment fade-up">
+							<p>... controllers</p>
+							<p>... directives</p>
+							<p>... templates</p>
+							<p>... global event listeners ... models</p>
+							<p>... no view models</p>
+						</div>
+						<div class="fragment fade-up">
+							<h3>Just </h3>
+							<h1>Component</h1>
+						</div>
+					</section>
+					<section  style="text-align: left;">
+						<h3>Component</h3>
+						<ul>
+							<li>Components are self-contained reusable building blocks of web application</li><br>
+							<li>React components are basically just idempotent functions (same input produces same output)</li><br>
+							<li>They describe your UI at any point in time, just like a server-rendered app</li>
+						</ul>
+					</section>
+					<section style="text-align: left;">
+						<h3>Component</h3>
+						<ul>
+							<li>Create component with ES6 extending React.Component</li>
+							<li>The only required method is render()</li>
+							<li>Inserted into DOM using React.renderComponent()</li>
+						</ul>
+						<pre><code>
+import React from 'react',
+class SimpleView extends React.Component {
+ render() {
+  return (&lt;h1&gt;&lt;strong&gt;Example 1:&lt;/strong&gt; A simple component&lt;/h1&gt;);
+ }
+});
+React.renderComponent(&lt;SimpleView /&gt, document.getElementById('example'));
+					</code></pre>
+					</section>
+					<section  style="text-align: left;">
+						<h3>Presentation Components</h3>
+						<ul>
+							<li>Are concerned with how things look</li><br>
+							<li>Have no dependencies on the rest of the app, such as actions or Store</li><br>
+							<li>Receive data and callbacks esclusively via props</li><br>
+							<li>Rarely have their own state: Stateless Component</li><br>
+						</ul>
+					</section>
+
+					<section  style="text-align: left;">
+						<h3>Container Components</h3>
+						<ul>
+							<li>Are concerned with how things work</li><br>
+							<li>Provide data and behaviour to presentational or other container components</li><br>
+							<li>Provide actions as a calbback to presentational components </li><br>
+							<li>Are often Stateful Component</li><br>
+						</ul>
+					</section>
+
+					<section data-transition="fade-in none-out">
+						<h3>Break the UI into component hierarchy</h3>
+						<img style="width: 1064px;" class="fragment current-visible" data-src="images/shopping_cart.png">
+						<img style="width: 1064px;position:absolute;top:180px;left:0;" class="fragment current-visible" data-src="images/shopping_components_2.png">
+						<img style="width: 1064px;position:absolute;top:180px;left:0;" class="fragment current-visible" data-src="images/shopping_components_3.png">
+						<img style="width: 1064px;position:absolute;top:180px;left:0;" class="fragment" data-src="images/shopping_components_4.png">
+					</section>
+				</section>
+
+				<section class="stack">
+					<section>
+						<h1>Props & State</h1>
+					</section>
+					<section style="text-align: left;">
+						<h3>Props</h3>
+
+						<ul>
+							<li><span><span>Passed down to component from parent component and represents data for the component</span></span>
+							</li>
+							<li>accessed via <strong>this.props</strong>
+							</li>
+						</ul>
+						<pre>
+							<code>
+class Welcome extends React.Component {
+ render() {
+  return  &lt;h1&gt;Hello, {this.props.name} &lt;/h1&gt;;
+ }
+}
+
+const element =  &lt;Welcome name="Sara" /&gt;;
+ReactDOM.render(
+  element,
+  document.getElementById('root')
+);
+							</code>
+						</pre>
+					</section>
+
+					<section data-transition="fade-in none-out">
+						<h3>PROPS ARE IMMUTABLE</h3>
+						<img class="fragment" data-src="images/props_immutable.png">
+						<img style="position:absolute;top: 105px; left: 122px;" class="fragment" data-src="images/props_immutable_2.png">
+					</section>
+
+					<section>
+						<h1>State</h1>
+					</section>
+					<section>
+						<h3>State</h3>
+						<ul>
+							<li>Represents internal state of the component</li>
+							<li>Accessed via <strong>this.state</strong></li>
+							<li>Mutated via <strong>setState(updater, [callback])</strong></li>
+							<li>When a component's state data changes, the rendered markup will be
+								updated by re-invoking render() method
+							</li>
+						</ul>
+						<pre><code>
+render() {
+ return (
+ &lt;div&gt;
+ &lt;h3&gt;Click count: {this.state.clicks}&lt;/h3&gt;
+ &lt;button onClick={() => this.setState({clicks: this.state.clicks+1})} /&gt;
+ &lt;/div&gt;
+}
+						</code></pre>
+					</section>
+					<section data-transition="fade-in none-out">
+						<h3>STATE ARE MUTABLE</h3>
+						<img data-src="images/state_mutable.png">
+						<img style="position:absolute;top:105px;left:122px;" class="fragment" data-src="images/state_mutable_2.png">
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>Component Lifecycle</h1>
+					</section>
+					<section style="text-align: left;">
+						<h3>Component Lifecycle: <span style="color: #8c8f90; font-weight: 500">Mounting</span></h3>
+						<ul>
+							<li>constructor() </li>
+							<li>componentWillMount()</li>
+							<li>render()</li>
+							<li>componentDidMount()</li>
+						</ul>
+					</section>
+					<section style="text-align: left;">
+						<h3>Component Lifecycle: <span style="color: #8c8f90; font-weight: 500">Updating</span></h3>
+						<ul>
+							<li>componentWillReceiveNextProps(nextProps) </li>
+							<li>shouldComponentUpdate(nextProps, nextState)</li>
+							<li>componentWillUpdate(nextProps, nextState)</li>
+							<li>render()</li>
+							<li>componentDidUpdate()</li>
+						</ul>
+					</section>
+
+					<section style="text-align: left;">
+						<h3>Component Lifecycle: <span style="color: #8c8f90; font-weight: 500">Unmounting</span></h3>
+						<ul>
+							<li>componentWillUnmount()</li>
+						</ul>
+					</section>
+					<section style="text-align: left;">
+						<h3>Pure Component</h3>
+						<p>React.PureComponent is exactly like React.Component but implements shouldComponentUpdate()
+							with a shallow prop and state comparison</p> <br>
+						<p>React.PureComponent's shouldComponentUpdate() skip prop updates for the whole component subtree.
+							Make sure all the component tree are also Pure</p>
+					</section>
+
+					<section style="text-align: left;">
+						<h3>Example Pure Component</h3>
+						<pre>
+							<code>class CounterButton extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {count: 1};
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.color !== nextProps.color) {
+      return true;
+    }
+    if (this.state.count !== nextState.count) {
+      return true;
+    }
+    return false;
+  }
+
+  render() {
+    return (
+      &lt;button
+        color={this.props.color}
+        onClick={() =&gt; this.setState(state =&gt; ({count: state.count + 1}))}&gt;
+        Count: {this.state.count}
+      &lt;/button&gt;
+    );
+  }
+}
+							</code>
+						</pre>
+					</section>
+
+					<section style="text-align: left;">
+						<h3>Example Pure Component</h3>
+						<pre>
+							<code>
+class CounterButton extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {count: 1};
+  }
+
+  handleClick() {
+	this.setState(state => ({count: state.count + 1});
+  }
+
+  render() {
+    return (
+      &lt;button
+		  color={this.props.color}
+		  onClick={this.handleClick}&gt;
+		  Count: {this.state.count}
+	  &lt;/button&gt;
+	);
+  }
+}
+							</code>
+						</pre>
+					</section>
+				</section>
+
+				<section class="stack">
+					<section >
+						<h1>JSX</h1>
+					</section>
+					<section style="text-align: left;">
+						<h3>JSX</h3>
+						<p>Provide syntactic sugar for the React.createElement(component, props, ...children) function</p>
+						<pre><code>/** @jsx React.DOM */
+ render () {
+  return ( &lt;MyButton color="blue" shadowSize={2}&gt;
+			Click Me
+		   &lt;/MyButton&gt;
+ }
+
+ /** regular DOM */
+ render () {
+	 return React.createElement(
+		MyButton, {color: 'blue', shadowSize: 2}, 'Click Me'
+	 );
+ }
+						</code></pre>
+					</section>
+					<section style="text-align: left">
+						<h3>JSX Children</h3>
+						<p>You can provide more JSX elements as the children. <br>This is useful for displaying nested components:</p>
+						<pre><code>
+&lt;MyContainer&gt;
+  &lt;MyFirstComponent/&gt;
+  &lt;MySecondComponent /&gt;
+  &lt;MyThirdComponent /&gt;
+&lt;/MyContainer&gt;
+						</code></pre>
+					</section>
+
+					<section style="text-align: left">
+						<h3>JSX Expressions as Children</h3>
+						<p>You can pass any JavaScript expression as children, by enclosing it within <span>{}</span>.<br>
+						<pre><code>/
+function Item(props) {
+  return &lt;li&gt;{props.message}&lt;/li&gt;;
+}
+
+function TodoList() {
+  const todos = ['finish doc', 'submit pr', 'nag dan to review'];
+  return (
+    &lt;ul&gt;
+      {todos.map((message) => &lt;Item key={message} message={message} /&gt;)}
+    &lt;/ul&gt;
+  );
+}
+						</code></pre>
+					</section>
+
+					<section style="text-align: left;">
+						<h3>JSX Final Considerations</h3>
+						<ul>
+							<li>Arguably, one of the coolest things in React</li>
+							<li>XML-like syntax for generating component's HTML</li>
+							<li>Easier to read and understand large DOM trees</li>
+							<li>Translates to plain JavaScript using <strong>react-tools</strong>
+							</li>
+						</ul>
+					</section>
+				</section>
+
+				<section class="stack">
+					<section>
+						<h1>Virtual DOM</h1>
+					</section>
+					<section style="text-align: left;">
+						<h3>DOM MANIPULATION</h3>
+						<ul>
+							<li>DOM manipulation is the heart of the modern, interactive web</li><br>
+							<li>Most frameworks update DOM much more than they have to.</li><br>
+							<li>It’s EXPENSIVE!</li>
+						</ul>
+					</section>
+					<section style="text-align: left;">
+						<h3>Virtual DOM</h3>
+						<ul>
+							<li>React’s in local and simplified copy of the HTML DOM</li><br>
+							<li>It's used for efficient re-rendering of the DOM</li><br>
+							<li>Manipulating the virtual DOM is much faster, because nothing gets drawn onscreen</li>
+						</ul>
+					</section>
+					<section style="text-align: left;">
+						<h3>RECONCILIATION</h3>
+						<ul>
+							<li>Two virtual trees (new and previous) to find differences and
+								batch update real DOM (Diffing operation)
+							</li>
+							<li>Only computes a patch operation that updates part of the DOM
+							</li>
+						</ul>
+						<img data-src="images/virtual_dom.png">
+					</section>
+					<section style="text-align: left;">
+						<h3>Virtual DOM Benefits</h3>
+						<ul>
+							<li>Minimal DOM manipulation calls</li>
+							<li>Batch ecìxecutions save a lot of computation</li>
+							<li>Fast performance</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>Flux Design Pattern</h1>
+					</section>
+					<section style="text-align: left; font-size: 0.7em;">
+						<h3>Flux Design Pattern</h3>
+						<img data-src="images/flux.png">
+					</section>
+					<section style="text-align: left;">
+						<h3>Redux</h3>
+						<ul>
+							<li>Redux was created by Dan Abramov and Andrew Clark in 2015</li>
+							<li>Redux is inspired by Facebook’s Flux and influenced by functional programming language Elm</li>
+							<li>Redux is an open-source JavaScript library designed for managing application state.</li>
+						</ul>
+					</section>
+				</section>
+				<section >
+					<section>
+						<h1>Demo</h1>
+					</section>
+
+					<section style="text-align: left">
+						<h2>create-react-app</h2>
+						<a target="_blank" href="https://github.com/facebookincubator/create-react-app">https://github.com/facebookincubator/create-react-app</a>
+					</section>
+
+					<section>
+						<h2>Simple Todo App</h2>
+						<img style="border: 1px solid #8c8f90; margin-left: 10px" data-src="images/todo-design.png">
+					</section>
+				</section>
+
+
+				<section>
+					<h1>Thank You!</h1>
+					<p>@marcotagliabue</p>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
